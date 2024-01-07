@@ -37,8 +37,8 @@ struct NoteListView: View {
                     } else {
                         List {
                             ForEach (viewModel.notes, id: \.noteId!) { note in
-                                if (note.contains(searchText: viewModel.searchText) || !viewModel.isSearchPresented) {
-                                    NoteItemView(note: note)
+                                if (note.contains(searchText: viewModel.searchText, userTags: currentSession.tags ) || !viewModel.isSearchPresented) {
+                                    NoteItemView(note: note, tags: currentSession.tags)
                                         .listRowSeparator(.hidden)
                                         .onTapGesture {
                                             if (note.type != .note) {

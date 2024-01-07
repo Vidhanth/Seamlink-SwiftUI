@@ -22,7 +22,7 @@ class AuthManager {
             StorageManager.shared.storeCredentials(email: email, password: password)
             return Result(success: true, payload: response.session)
         } catch {
-            print(error.localizedDescription)
+            print(error)
             return Result(success: false, message: error.localizedDescription)
         }
     }

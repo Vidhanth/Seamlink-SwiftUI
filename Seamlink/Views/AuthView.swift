@@ -62,10 +62,7 @@ struct AuthView: View {
                     let result = await AuthManager.shared.signIn(email: username, password: password)
                     
                     if (result.success) {
-                        withAnimation {
-                            let session = result.payload as! Session
-                            currentSession.createSession(session: session)
-                        }
+                        await currentSession.createSession(session: result.payload as! Session)
                     } else {
                         withAnimation {
                             isLoading = false
@@ -75,7 +72,7 @@ struct AuthView: View {
                 
                 
             } label: {
-                Text ("Login")
+                Text ("Sign In")
                     .frame(maxWidth: .infinity)
                     .padding(7)
             }.buttonStyle(.borderedProminent)
@@ -142,10 +139,7 @@ struct AuthView: View {
                     let result = await AuthManager.shared.signUp(email: username, password: password)
                     
                     if (result.success) {
-                        withAnimation {
-                            let session = result.payload as! Session
-                            currentSession.createSession(session: session)
-                        }
+                        await currentSession.createSession(session: result.payload as! Session)
                     } else {
                         withAnimation {
                             isLoading = false
@@ -155,7 +149,7 @@ struct AuthView: View {
                 }
                 
             } label: {
-                Text ("Login")
+                Text ("Sign Up")
                     .frame(maxWidth: .infinity)
                     .padding(7)
             }.buttonStyle(.borderedProminent)
@@ -196,10 +190,9 @@ struct AuthView: View {
             Task {
                 let result = await AuthManager.shared.attemptSignIn()
                 if (result.success) {
-                    withAnimation {
-                        let session = result.payload as! Session
-                        currentSession.createSession(session: session)
-                    }
+                    let session = result.payload as! Session
+                    await currentSession.createSession(session: session)
+                    
                 } else {
                     withAnimation {
                         isLoading = false

@@ -18,7 +18,7 @@ struct OptionsSheet: View {
         
         Form {
             Section() {
-                NoteItemView(note: note, showBackground: false)
+                NoteItemView(note: note, showBackground: false, tags: [])
             }
             .padding(0)
             Section {

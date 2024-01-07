@@ -21,7 +21,7 @@ struct Note: Codable {
     let title: String?
     let dateCreated: Date
     let dateUpdated: Date
-    let tags: String
+    let tags: [Int]
     let type: NoteType
     // Youtube Data
     let channelName: String?
@@ -30,7 +30,7 @@ struct Note: Codable {
     let duration: String?
     let progress: Double?
     
-    init(userId: UUID, noteId: Int? = nil, text: String, title: String? = nil, dateCreated: Date, dateUpdated: Date, tags: String = "", type: NoteType, channelName: String? = nil, thumbURL: String? = nil, channelThumbURL: String? = nil, duration: String? = nil, progress: Double? = nil) {
+    init(userId: UUID, noteId: Int? = nil, text: String, title: String? = nil, dateCreated: Date, dateUpdated: Date, tags: [Int] = [], type: NoteType, channelName: String? = nil, thumbURL: String? = nil, channelThumbURL: String? = nil, duration: String? = nil, progress: Double? = nil) {
         self.userId = userId
         self.noteId = noteId
         self.text = text
@@ -60,7 +60,7 @@ extension Note {
         
     }
     
-    func contains(searchText: String) -> Bool {
+    func contains(searchText: String, userTags: [String]) -> Bool {
         let lowerCasedSearchText = searchText.lowercased()
         if (text.lowercased().contains(lowerCasedSearchText)) {
             return true
@@ -75,7 +75,7 @@ extension Note {
             return true
         }
         for tag in tags {
-            if (tag.lowercased().contains(lowerCasedSearchText)) {
+            if (userTags[tag].lowercased().contains(lowerCasedSearchText)) {
                 return true
             }
         }
@@ -85,5 +85,5 @@ extension Note {
 }
 
 struct MockData {
-    static let dummyNote = Note(userId: UUID(), text: "youtube.com", title: "for evrery inta dslkfjlaksdjfl kjasdflj lkjsd evrery inta dslkfjlaksdjfl kjasdflj lkjsd", dateCreated: Date(), dateUpdated: Date(), type: .youtube, channelName: "TechSource", thumbURL: "https://i.ytimg.com/vi/Xwa5YAjRu2M/hqdefault.jpg", duration: "10:20")
+    static let dummyNote = Note(userId: UUID(), text: "youtube.com", title: "for evrery inta dslkfjlaksdjfl kjasdflj lkjsd evrery inta dslkfjlaksdjfl kjasdflj lkjsd", dateCreated: Date(), dateUpdated: Date(), tags: [0], type: .youtube, channelName: "TechSource", thumbURL: "https://i.ytimg.com/vi/Xwa5YAjRu2M/hqdefault.jpg", duration: "10:20")
 }

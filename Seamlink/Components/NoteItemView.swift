@@ -11,6 +11,7 @@ struct NoteItemView: View {
     
     let note: Note
     var showBackground: Bool = true
+    var tags: [String]
     
     var body: some View {
         VStack (alignment: .leading){
@@ -54,8 +55,8 @@ struct NoteItemView: View {
             if (!note.tags.isEmpty) {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
-                        ForEach(note.tags.components(separatedBy: ","), id: \.self) { tag in
-                            TagItem(tagLabel: tag)
+                        ForEach(note.tags, id: \.self) { tag in
+                            TagItem(tagLabel: tags[tag])
                         }
                     }
                 }
@@ -69,5 +70,5 @@ struct NoteItemView: View {
 }
 
 #Preview {
-    NoteItemView(note: MockData.dummyNote, showBackground: false)
+    NoteItemView(note: MockData.dummyNote, showBackground: false, tags: ["Prod", "Pers"])
 }

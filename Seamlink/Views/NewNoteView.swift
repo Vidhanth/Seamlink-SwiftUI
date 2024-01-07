@@ -55,6 +55,9 @@ struct NewNoteView: View {
                 .padding(10)
                 .background(.gray.opacity(0.2))
                 .clipShape(.rect(cornerRadius: 15))
+                
+                TagPicker(selectedIndices: $viewModel.selectedIndices)
+                
                 Toggle(isOn: $viewModel.autoTitle) {
                     VStack (alignment: .leading) {
                         Text("Automatically get link details")
@@ -79,7 +82,7 @@ struct NewNoteView: View {
                                     addedNote = (result.payload as! Note)
                                     isPresented = false
                                 } else {
-                                    if (result.payload as! SmError == SmError.noteEmpty) {
+                                    if (result.payload as? SmError == SmError.noteEmpty) {
                                         isPresented = false
                                     }
                                 }

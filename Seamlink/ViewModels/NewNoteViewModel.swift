@@ -13,6 +13,7 @@ import SwiftUI
     @Published var text: String = ""
     @Published var autoTitle: Bool = false
     @Published var isLoading: Bool = false
+    @Published var selectedIndices: [Int] = []
     
     var userId: UUID? = nil
     
@@ -24,6 +25,7 @@ import SwiftUI
         guard let note else { return }
         title = note.title ?? ""
         text = note.text
+        selectedIndices = note.tags
     }
     
     func saveNote() async -> Result {
@@ -68,7 +70,7 @@ import SwiftUI
         let dateCreated = oldNote?.dateCreated ?? Date()
         
         if (availableLinks.isEmpty || !autoTitle) {
-            let note = Note(userId: userId, noteId: id, text: text.trim(), title: title.trim(), dateCreated: dateCreated, dateUpdated: Date(), tags: "", type: .note)
+            let note = Note(userId: userId, noteId: id, text: text.trim(), title: title.trim(), dateCreated: dateCreated, dateUpdated: Date(), tags: selectedIndices, type: .note)
             return note
         }
         
@@ -78,16 +80,16 @@ import SwiftUI
             
             do {
                 let youtubeData = try await YoutubeParser.shared.getVideoDetails(url: url.absoluteString)
-                return Note(userId: userId, noteId: id, text: text.trim(), title: youtubeData.title, dateCreated: dateCreated, dateUpdated: Date(), tags: "", type: .youtube, channelName: youtubeData.channelName, thumbURL: youtubeData.thumbURL, channelThumbURL: youtubeData.channelThumbURL, duration: youtubeData.duration, progress: youtubeData.progress)
+                return Note(userId: userId, noteId: id, text: text.trim(), title: youtubeData.title, dateCreated: dateCreated, dateUpdated: Date(), tags: selectedIndices, type: .youtube, channelName: youtubeData.channelName, thumbURL: youtubeData.thumbURL, channelThumbURL: youtubeData.channelThumbURL, duration: youtubeData.duration, progress: youtubeData.progress)
             } catch {
                 let urlTitle = UrlParser.shared.getTitle(from: url)
-                return Note(userId: userId, noteId: id, text: text.trim(), title: urlTitle.isEmpty ? title : urlTitle, dateCreated: dateCreated, dateUpdated: Date(), tags: "", type: .link)
+                return Note(userId: userId, noteId: id, text: text.trim(), title: urlTitle.isEmpty ? title : urlTitle, dateCreated: dateCreated, dateUpdated: Date(), tags: selectedIndices, type: .link)
             }
             
         }
         
         let urlTitle = UrlParser.shared.getTitle(from: url)
-        return Note(userId: userId, noteId: id, text: text.trim(), title: urlTitle.isEmpty ? title : urlTitle, dateCreated: dateCreated, dateUpdated: Date(), tags: "", type: .link)
+        return Note(userId: userId, noteId: id, text: text.trim(), title: urlTitle.isEmpty ? title : urlTitle, dateCreated: dateCreated, dateUpdated: Date(), tags: selectedIndices, type: .link)
         
     }
     
